@@ -53,9 +53,9 @@ echo "File Systems Table on /mnt/etc/fstab."
 cat /mnt/etc/fstab
 
 echo "Changing Installed Environment..."
-script=`basename "$0"`
-cp $script /mnt/root
-chmod 755 /mnt/root/$script
-arch-chroot /mnt /root/$script --chroot
-#maybe wont work as intended
-rm /mnt/root/$script
+
+cp on_chroot.sh /mnt/root
+cp on_first_reboot.sh /mnt/root
+chmod 755 /mnt/root/on_chroot.sh
+chmod 755 /mnt/root/on_first_reboot.sh
+arch-chroot /mnt
