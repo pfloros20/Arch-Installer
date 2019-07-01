@@ -48,6 +48,7 @@ echo -e "\twrite to save changes and quit"
 wait_for_keypress
 cgdisk /dev/$disk
 
+clear
 bprint "Listing Disks..."
 lsblk
 bprint "Enter Boot Partition: "
@@ -85,10 +86,8 @@ wait_for_keypress
 
 bprint "Generating File Systems Table..."
 genfstab -U /mnt >> /mnt/etc/fstab
-wait_for_keypress
 bprint "File Systems Table on /mnt/etc/fstab."
 cat /mnt/etc/fstab
-wait_for_keypress
 
 bprint "Changing Installed Environment..."
 
