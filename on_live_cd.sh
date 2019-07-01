@@ -10,8 +10,10 @@ wait_for_keypress (){
 	stty -echo
 	read -n 1
 	stty echo
+	clear
 }
 
+clear
 bprint "Pinging the archlinux.org website to check internet connection..."
 ping -c 3 archlinux.org
 wait_for_keypress
@@ -24,43 +26,47 @@ wait_for_keypress
 
 bprint "Listing Disks..."
 lsblk
-wait_for_keypress
 bprint "Enter Target Disk: "
 read disk
 bprint "You chose $disk"
 bprint "Recommended:"
-echo "boot partition, size = 600M, GUID/partition type = ef00, name = boot"
-echo "swap partition, size = recommended size is equal to RAM size, GUID/partition type = 8200, name = swap"
-echo "new partition, size = default to use all the free space, GUID/partition type = 8300 (linux file system), name = system"
-echo "write to save changes and quit"
+echo -e "\tboot partition"
+echo -e "\t\tsize = 600M"
+echo -e "\t\tGUID/partition type = ef00"
+echo -e "\t\tname = boot\n"
+
+echo -e "\tswap partition"
+echo -e "\t\tsize = recommended size is equal to RAM size"
+echo -e "\t\tGUID/partition type = 8200"
+echo -e "\t\tname = swap\n"
+
+echo -e "\tsystem partition"
+echo -e "\t\tsize = default to use all the free space"
+echo -e "\t\tGUID/partition type = 8300 (linux file system)"
+echo -e "\t\tname = system\n"
+echo -e "\twrite to save changes and quit"
 wait_for_keypress
 cgdisk /dev/$disk
 
 bprint "Listing Disks..."
 lsblk
-wait_for_keypress
 bprint "Enter Boot Partition: "
 read boot
 bprint "Formatting $boot as Boot Partition..."
 mkfs.fat -F32 /dev/$boot
-wait_for_keypress
 bprint "Enter Swap Partition: "
 read swap
 bprint "Formatting $swap as Swap Partition..."
 mkswap /dev/$swap
 swapon /dev/$swap
-wait_for_keypress
 bprint "Enter System Partition: "
 read system
 bprint "Formatting $system as System Partition..."
 mkfs.ext4 /dev/$system
-wait_for_keypress
 bprint "Mounting System Partition..."
 mount /dev/$system /mnt
-wait_for_keypress
 bprint "Creating Boot Directory..."
 mkdir /mnt/boot
-wait_for_keypress
 bprint "Mounting Boot Partition..."
 mount /dev/$boot /mnt/boot
 wait_for_keypress
