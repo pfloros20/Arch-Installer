@@ -28,12 +28,14 @@ wait_for_keypress
 bprint "Enter Target Disk: "
 read disk
 bprint "You chose $disk"
+bprint "Recommended:"
+echo "boot partition, size = 600M, GUID/partition type = ef00, name = boot"
+echo "swap partition, size = recommended size is equal to RAM size, GUID/partition type = 8200, name = swap"
+echo "new partition, size = default to use all the free space, GUID/partition type = 8300 (linux file system), name = system"
+echo "write to save changes and quit"
 wait_for_keypress
 cgdisk /dev/$disk
-#new partition, size = 600M, GUID/partition type = ef00, name = boot
-#new partition, size = recommended size is equal to RAM size, GUID/partition type = 8200, name = swap
-#new partition, size = default to use all the free space, GUID/partition type = 8300 (linux file system), name = system
-#write to save changes and quit
+
 bprint "Listing Disks..."
 lsblk
 wait_for_keypress
