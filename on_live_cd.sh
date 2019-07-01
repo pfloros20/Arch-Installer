@@ -1,58 +1,88 @@
-echo "Pinging the archlinux.org website to check internet connection..."
+bold=$(tput bold)
+normal=$(tput sgr0)
+
+bprint (){
+	echo "$bold $1 $normal"
+}
+
+wait_for_keypress (){
+	echo "Press any key to continue..."
+	stty -echo
+	read -n 1
+	stty echo
+}
+
+bprint "Pinging the archlinux.org website to check internet connection..."
 ping -c 3 archlinux.org
-echo "Checking if on efi system..."
+wait_for_keypress
+bprint "Checking if on efi system..."
 ls /sys/firmware/efi/efivars
-# echo "Updating the system clock..."
+# bprint "Updating the system clock..."
 # timedatectl set-ntp true
 # date
+wait_for_keypress
 
-echo "Listing Disks..."
+bprint "Listing Disks..."
 lsblk
-echo "Enter Target Disk: "
+wait_for_keypress
+bprint "Enter Target Disk: "
 read disk
-echo "You chose $disk"
+bprint "You chose $disk"
 cgdisk /dev/$disk
 #new partition, size = 600M, GUID/partition type = ef00, name = boot
 #new partition, size = recommended size is equal to RAM size, GUID/partition type = 8200, name = swap
 #new partition, size = default to use all the free space, GUID/partition type = 8300 (linux file system), name = system
 #write to save changes and quit
-echo "Listing Disks..."
+wait_for_keypress
+bprint "Listing Disks..."
 lsblk
-echo "Enter Boot Partition: "
+wait_for_keypress
+bprint "Enter Boot Partition: "
 read boot
-echo "Formatting $boot as Boot Partition..."
+bprint "Formatting $boot as Boot Partition..."
 mkfs.fat -F32 /dev/$boot
-echo "Enter Swap Partition: "
+wait_for_keypress
+bprint "Enter Swap Partition: "
 read swap
-echo "Formatting $swap as Swap Partition..."
+bprint "Formatting $swap as Swap Partition..."
 mkswap /dev/$swap
 swapon /dev/$swap
-echo "Enter System Partition: "
+wait_for_keypress
+bprint "Enter System Partition: "
 read system
-echo "Formatting $system as System Partition..."
+bprint "Formatting $system as System Partition..."
 mkfs.ext4 /dev/$system
-echo "Mounting System Partition..."
+wait_for_keypress
+bprint "Mounting System Partition..."
 mount /dev/$system /mnt
-echo "Creating Boot Directory..."
+wait_for_keypress
+bprint "Creating Boot Directory..."
 mkdir /mnt/boot
-echo "Mounting Boot Partition..."
+wait_for_keypress
+bprint "Mounting Boot Partition..."
 mount /dev/$boot /mnt/boot
-echo "Reporting File System Disk Space Usage.."
+wait_for_keypress
+bprint "Reporting File System Disk Space Usage.."
 df
+wait_for_keypress
 
-echo "Editing Mirror List putting at the top a nearby mirror..."
+bprint "Editing Mirror List putting at the top a nearby mirror..."
 mirrorlist=$(cat /etc/pacman.d/mirrorlist | grep '\.gr/')
-echo $mirrorlist | cat - /etc/pacman.d/mirrorlist > temp && mv temp /etc/pacman.d/mirrorlist
+bprint $mirrorlist | cat - /etc/pacman.d/mirrorlist > temp && mv temp /etc/pacman.d/mirrorlist
 
-echo "Installing Arch System..."
+wait_for_keypress
+bprint "Installing Arch System..."
 pacstrap /mnt base base-devel
+wait_for_keypress
 
-echo "Generating File Systems Table..."
+bprint "Generating File Systems Table..."
 genfstab -U /mnt >> /mnt/etc/fstab
-echo "File Systems Table on /mnt/etc/fstab."
+wait_for_keypress
+bprint "File Systems Table on /mnt/etc/fstab."
 cat /mnt/etc/fstab
+wait_for_keypress
 
-echo "Changing Installed Environment..."
+bprint "Changing Installed Environment..."
 
 cp on_chroot.sh /mnt/root
 cp on_first_reboot.sh /mnt/root
