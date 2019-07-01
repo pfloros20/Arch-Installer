@@ -28,12 +28,12 @@ wait_for_keypress
 bprint "Enter Target Disk: "
 read disk
 bprint "You chose $disk"
+wait_for_keypress
 cgdisk /dev/$disk
 #new partition, size = 600M, GUID/partition type = ef00, name = boot
 #new partition, size = recommended size is equal to RAM size, GUID/partition type = 8200, name = swap
 #new partition, size = default to use all the free space, GUID/partition type = 8300 (linux file system), name = system
 #write to save changes and quit
-wait_for_keypress
 bprint "Listing Disks..."
 lsblk
 wait_for_keypress
@@ -84,8 +84,7 @@ wait_for_keypress
 
 bprint "Changing Installed Environment..."
 
-cp on_chroot.sh /mnt/root
-cp on_first_reboot.sh /mnt/root
-chmod 755 /mnt/root/on_chroot.sh
-chmod 755 /mnt/root/on_first_reboot.sh
+mv ../Arch-Installer /mnt/root/Arch-Installer
+chmod 755 /mnt/root/Arch-Installer
+
 arch-chroot /mnt
