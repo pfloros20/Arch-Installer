@@ -41,7 +41,7 @@ wait_for_keypress
 bprint "Enter Username: "
 read username
 bprint "Setting up User..."
-useradd -g users -G wheel, storage, power -m $username
+useradd -g users -G wheel,storage,power -m $username
 bprint "Setting up User Password..."
 passwd $username
 
@@ -51,6 +51,18 @@ pacman -Syu grub efibootmgr os-prober
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 
+wait_for_keypress
+bprint "Installing Xorg..."
+pacman -Syu xorg xorg-server xorg-xinit
+
+#cp /etc/X11/xinit/xinitrc ~/.xinitrc
+#echo 'exec startdde' >> ~/.xinitrc
+
+wait_for_keypress
+bprint "Installing Deepin..."
+pacman -Syu deepin
+
+wait_for_keypress
 bprint "Enable dhcpcd service..."
 systemctl enable dhcpcd
 systemctl start dhcpcd

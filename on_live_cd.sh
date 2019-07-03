@@ -77,7 +77,7 @@ wait_for_keypress
 
 bprint "Editing Mirror List putting at the top a nearby mirror..."
 mirrorlist=$(cat /etc/pacman.d/mirrorlist | grep '\.gr/')
-bprint $mirrorlist | cat - /etc/pacman.d/mirrorlist > temp && mv temp /etc/pacman.d/mirrorlist
+echo $mirrorlist | cat - /etc/pacman.d/mirrorlist > temp && mv temp /etc/pacman.d/mirrorlist
 
 wait_for_keypress
 bprint "Installing Arch System..."
