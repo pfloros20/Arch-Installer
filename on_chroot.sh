@@ -55,8 +55,10 @@ wait_for_keypress
 bprint "Installing Xorg..."
 pacman -Syu xorg xorg-server xorg-xinit
 
-#cp /etc/X11/xinit/xinitrc ~/.xinitrc
-#echo 'exec startdde' >> ~/.xinitrc
+xinit=/home/$username/.xinitrc
+cp /etc/X11/xinit/xinitrc $xinit
+sed -i "$(( $(wc -l < $xinit) - 5 + 1)),\$s/^/#/g" $xinit
+echo 'exec startdde' >> /home/$username/.xinitrc
 
 wait_for_keypress
 bprint "Installing Deepin..."
@@ -69,7 +71,8 @@ systemctl start dhcpcd
 
 wait_for_keypress
 
-bprint "visudo and uncomment # %wheel ALL = (ALL) ALL"
+bprint "Making wheel group users sudoers..."
+sed -i 's/^# %wheel ALL=(ALL) ALL$/%wheel ALL=(ALL) ALL/g' /etc/sudoers
 
 bprint "Exiting Installed Environment..."
 bprint "Type the reboot command to reboot the system and boot into existing os."
