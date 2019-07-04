@@ -74,7 +74,7 @@ wait_for_keypress
 bprint "Making wheel group users sudoers..."
 sed -i 's/^# %wheel ALL=(ALL) ALL$/%wheel ALL=(ALL) ALL/g' /etc/sudoers
 
+wait_for_keypress
 bprint "Exiting Installed Environment..."
-bprint "Type the reboot command to reboot the system and boot into existing os."
 exit
 

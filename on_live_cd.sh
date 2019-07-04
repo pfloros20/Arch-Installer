@@ -95,3 +95,5 @@ mv ../Arch-Installer /mnt/root/Arch-Installer
 chmod 755 /mnt/root/Arch-Installer
 
 arch-chroot /mnt
+
+reboot
